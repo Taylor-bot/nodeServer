@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+  <div>
+    username : <input type="text" id="username">
+    password : <input type="password" name="password" id="password">
+    <button id="zhuce">zhuce</button>
+    <hr>
+    <button id="delete">delete</button>
+    <button id="update" >
+      update
+    </button>
+
+
+    <hr>
+    <table border="1">
+      <thead>
+
+        <tr>
+          <td>id</td>
+          <td>username</td>
+          <td>password</td>
+          <td>shanchu
+          </td>
+          <td>xiugai</td>
+
+
+
+        </tr>
+      </thead>
+
+      <tbody>
+
+      </tbody>
+    </table>
+  </div>
+
+
+  <script>
+    var pwd = document.getElementById('password')
+    var username = document.getElementById('username')
+    var zhuce = document.getElementById('zhuce')
+    var deletep = document.getElementById('delete')
+    var updatep = document.getElementById('update')
+    var tbody = document.querySelector('tbody')
+
+
+    zhuce.onclick = () => {
+      fetch('/api/user/', {
+        method: 'POST',
+        body: JSON.stringify({ username: username.value, password: pwd.value }),
+        headers: { "Content-Type": "application/json" }
+      }).
+        then(res => res.json()).
+        then(res => { console.log(res); })
+    }
+
+    updatep.onclick = () => {
+      fetch('/api/user/638cc7a501c80eadf1f20d52', {
+        method: 'PUT',
+        body: JSON.stringify({ username: 'JACK', password: 'KCAJ' }),
+        headers: { "Content-Type": "application/json" }
+      }).
+        then(res => res.json()).
+        then(res => { console.log(res); })
+    }
+
+    deletep.onclick = () => {
+
+      fetch('/api/user/638cd0c47b9015b45a2467e7' , {method: 'DELETE'}).
+        then(res => res.json()).
+        then(res => { console.log(res); })
+    }
+
+    //huoqushuju
+    fetch('/api/user?page=1&limit=10').then(res => res.json()).then(
+      data => {
+        console.log(data)
+        tbody.innerHTML = data.map(item =>
+          `
+        <tr>
+          <td>
+            ${item._id}
+            </td>
+            <td>
+            ${item.username}
+            </td>
+            <td>
+            ${item.password}
+            </td>
+            <td><button id ="shanchu" onclick= 'shanchu(${item._id})'>shanchu</button></td>
+          <td><button id ="xiugai">xiugai</button></td>
+          </tr> 
+        `).join("")
+      }
+    )
+
+    function shanchu(id) {
+  
+      console.log(id)
+      // fetch(`/api/user/delete/${id}`).
+      //   then(res => res.json()).
+      //   then(res => { console.log(res); })
+    }
+  </script>
+
+</body>
+
+</html>
